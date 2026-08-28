@@ -1,15 +1,11 @@
 {
-    "version": 2,
-    "buildCommand": "cd frontend && npm run build",
-    "outputDirectory": "frontend/dist",
-    "rewrites": [
-        {
-            "source": "/api/:path*",
-            "destination": "/backend/index.py"
-        },
-        {
-            "source": "/:path*",
-            "destination": "/frontend/dist/index.html"
-        }
-    ]
+  "version": 2,
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/dist",
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
