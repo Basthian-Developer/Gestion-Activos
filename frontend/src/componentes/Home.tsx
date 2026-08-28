@@ -7,6 +7,21 @@ export function Home(){
     const [count, setCount] = useState(0)
     const titulo = 'Gestión de activos'
 
+    const getComputadores = async() => {
+        try{
+            const response = await fetch("/api/health/computadores")
+
+            if(!response.ok){
+                throw new Error(`Error HTTP: ${response.status}`)
+            }
+
+            const data = await response.json()
+            console.log("Respuesta:", data)
+        }catch(error){
+            console.error("Error al llamar a la API: ", error)
+        }
+    }
+
     useEffect(() => {
         document.title = titulo
     }, [])
@@ -31,6 +46,13 @@ export function Home(){
                     onClick={() => setCount((count) => count + 1)}
                 >
                     Count is {count}
+                </button>
+                <button
+                    type="button"
+                    className="counter"
+                    onClick={getComputadores}
+                >
+                    Llamar a la API
                 </button>
             </section>
 
