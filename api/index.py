@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
 
 from features.test.health import router as healthRouter
 
