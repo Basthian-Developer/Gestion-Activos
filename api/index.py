@@ -12,6 +12,10 @@ app = FastAPI()
 def root():
     return {"message": "API funcionando"}
 
+@app.get("/api/prueba")
+def prueba():
+    return {"message": "prueba funcionando"}
+
 app.include_router(
     health.router,
     prefix="/api/health",
