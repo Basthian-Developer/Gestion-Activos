@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from features.test import health
+from .features.test import health
 
 app = FastAPI()
 
