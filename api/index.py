@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-from features.test.health import router as healthRouter
+from features.notebook.router import router as notebook_router
 
 app = FastAPI()
 
@@ -12,4 +12,4 @@ app = FastAPI()
 def root():
     return {"message": "API funcionando"}
 
-app.include_router(healthRouter)
+app.include_router(notebook_router)

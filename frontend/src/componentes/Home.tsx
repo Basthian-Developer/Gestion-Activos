@@ -9,7 +9,7 @@ export function Home(){
 
     const getComputadores = async() => {
         try{
-            const response = await fetch("/api/health/computadores")
+            const response = await fetch("/api/notebooks/get_all")
 
             if(!response.ok){
                 throw new Error(`Error HTTP: ${response.status}`)
