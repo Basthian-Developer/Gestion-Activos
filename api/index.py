@@ -1,6 +1,10 @@
 from fastapi import FastAPI
+import sys
+from pathlib import Path
 
-from .features.test import health
+sys.path.insert(0, str(Path(__file__).parent))
+
+from features.test import health
 
 app = FastAPI()
 
