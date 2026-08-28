@@ -4,7 +4,7 @@ from features.test import health
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/api")
 def root():
     return {"message": "API funcionando"}
 
