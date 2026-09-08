@@ -13,5 +13,6 @@ export default defineConfig({
         changeOrigin: true
       }
     }
-  }
+  },
+  base: '/Gestion-Activos/'
 })
