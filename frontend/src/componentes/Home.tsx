@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useActivos } from "@/features/activo/hook";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
 
@@ -299,6 +300,14 @@ export function Home() {
 
         mostrarToast("Alerta marcada como resuelta.");
     };
+
+    const { activos, loading, error } = useActivos();
+    
+    useEffect(() => {
+        if (!loading && !error && activos) {
+            console.log(activos);
+        }
+    },[activos,loading,error])
 
     useEffect(() => {
         if (!toast) {
