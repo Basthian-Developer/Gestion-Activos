@@ -29,6 +29,8 @@ jobs:
               run: npm ci
             - name: Generar build
               working-directory: ./frontend
+              env:
+                VITE_BUILD_MODE: demo
               run: npm run build
             - name: Configurar Github Pages
               uses: actions/configure-pages@v5
