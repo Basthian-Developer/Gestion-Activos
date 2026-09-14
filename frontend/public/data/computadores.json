@@ -1,14 +1,62 @@
 [
-    {
-        "id": 1,
-        "activo_id": 1,
-        "direccion_ip": "10.0.0.0",
-        "direccion_mac": "ASDB-SADAS-DSADA",
-        "os": "Windows 11",
-        "procesador": "Intel I5 3000",
-        "ram_size": "16 GB",
-        "ram_type": "SSD",
-        "storage_type": "SSD",
-        "storage_size": "256 GB"
-    }
+  {
+    "id": 1,
+    "activo_id": 1,
+    "direccion_ip": "192.168.10.101",
+    "direccion_mac": "02:1A:2B:3C:4D:01",
+    "os": "Windows 11 Pro",
+    "procesador": "AMD Ryzen 5 PRO 5650U",
+    "ram_size": "16 GB",
+    "ram_type": "DDR4",
+    "storage_type": "SSD",
+    "storage_size": "512 GB"
+  },
+  {
+    "id": 2,
+    "activo_id": 4,
+    "direccion_ip": "192.168.10.102",
+    "direccion_mac": "02:1A:2B:3C:4D:02",
+    "os": "Windows 11 Pro",
+    "procesador": "Intel Core i7-11700",
+    "ram_size": "32 GB",
+    "ram_type": "DDR4",
+    "storage_type": "SSD",
+    "storage_size": "1 TB"
+  },
+  {
+    "id": 3,
+    "activo_id": 5,
+    "direccion_ip": "192.168.10.103",
+    "direccion_mac": "02:1A:2B:3C:4D:03",
+    "os": "Windows 11 Pro",
+    "procesador": "Intel Core i5-1235U",
+    "ram_size": "16 GB",
+    "ram_type": "DDR4",
+    "storage_type": "SSD",
+    "storage_size": "256 GB"
+  },
+  {
+    "id": 4,
+    "activo_id": 6,
+    "direccion_ip": "192.168.10.104",
+    "direccion_mac": "02:1A:2B:3C:4D:04",
+    "os": "Ubuntu 24.04 LTS",
+    "procesador": "Intel Core i5-10400",
+    "ram_size": "8 GB",
+    "ram_type": "DDR4",
+    "storage_type": "SSD",
+    "storage_size": "512 GB"
+  },
+  {
+    "id": 5,
+    "activo_id": 7,
+    "direccion_ip": "192.168.10.105",
+    "direccion_mac": "02:1A:2B:3C:4D:05",
+    "os": "Windows 10 Pro",
+    "procesador": "Intel Core i5-1135G7",
+    "ram_size": "8 GB",
+    "ram_type": "DDR4",
+    "storage_type": "SSD",
+    "storage_size": "256 GB"
+  }
 ]

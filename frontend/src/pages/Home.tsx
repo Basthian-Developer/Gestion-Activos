@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Inventario from "@/components/Inventario";
+import { useActivos } from "@/hooks/useActivos";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
 
@@ -290,6 +291,18 @@ export function Home() {
         };
     }, [toast]);
 
+    const { data, isLoading, error: errorActivos } = useActivos();
+
+    const activos = data ?? [];
+
+    useEffect(() => {
+        if (errorActivos) {
+            console.error(errorActivos);
+        }
+    }, [errorActivos]);
+
+    const activosCount = activos.length;
+
     return (
         <div className="min-h-screen bg-[#10131b] text-[#f4f6ff] font-sans ambient-shell lg:flex">
             {sidebarAbierta && (
@@ -370,7 +383,13 @@ export function Home() {
 
                                         {item.id === "inventario" && (
                                             <span className="ml-auto rounded-full bg-white/10 px-2 text-xs">
-                                                128
+                                                {isLoading ? (
+                                                    <span>0</span>
+                                                ) :
+                                                    activosCount ? (
+                                                        <span>{activosCount}</span>
+                                                    ) : null
+                                                }
                                             </span>
                                         )}
 

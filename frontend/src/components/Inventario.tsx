@@ -1,23 +1,25 @@
-import { useComputadores } from "@/hooks/useComputers"
+import { useActivos } from "@/hooks/useActivos";
 import { useEffect, useState } from "react";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
 
 export default function Inventario() {
-    const { data: computers, isLoading: loadingComputers, isError: errorComputers } = useComputadores();
+    const { data, isLoading: loadingActivos, error: errorActivos, refetch, isFetching } = useActivos();
     const [busqueda, setBusqueda] = useState<string>("");
-    const [estado, setEstado] = useState<string>("");
+    const [estado, setEstado] = useState<Estado | "">("");
     const [tipo, setTipo] = useState<string>("");
     const [_seleccionado, setSeleccionado] = useState<number | null>(null);
 
-    const tiposDisponibles = [...new Set(computers?.map((c) => c.tipo))];
+    const activos = data ?? [];
 
-    const compFiltrados = computers?.filter((c) => {
+    const tiposDisponibles = [...new Set(activos.map((c) => c.tipo))];
+    const textoBusqueda = busqueda.trim().toLowerCase();
+    const activosFiltrados = activos.filter((c) => {
         const coincideBusqueda =
             !busqueda ||
             `${c.codigo} ${c.marca} ${c.modelo} ${c.responsable}`
                 .toLowerCase()
-                .includes(busqueda.toLowerCase());
+                .includes(textoBusqueda);
 
         const coincideEstado = !estado || c.estado === estado;
         const coincideTipo = !tipo || c.tipo === tipo;
@@ -32,10 +34,10 @@ export default function Inventario() {
     };
 
     useEffect(() => {
-        if (errorComputers) {
-            console.error(errorComputers);
+        if (errorActivos) {
+            console.error(errorActivos);
         }
-    }, [errorComputers])
+    }, [errorActivos]);
 
     return (
         <section>
@@ -63,6 +65,7 @@ export default function Inventario() {
                         />
 
                         <input
+                            aria-label="Buscar activos"
                             value={busqueda}
                             onChange={(event) =>
                                 setBusqueda(
@@ -75,6 +78,7 @@ export default function Inventario() {
                     </div>
 
                     <select
+                        aria-label="Filtrar por estado"
                         value={estado}
                         onChange={(event) =>
                             setEstado(
@@ -105,6 +109,7 @@ export default function Inventario() {
                     </select>
 
                     <select
+                        aria-label="Filtrar por tipo"
                         value={tipo}
                         onChange={(event) =>
                             setTipo(event.target.value)
@@ -157,109 +162,143 @@ export default function Inventario() {
                         </thead>
 
                         <tbody>
-                            {loadingComputers ? (
+                            {loadingActivos ? (
                                 <tr>
                                     <td colSpan={6} className="px-3 py-10 text-center text-[#b2b7c8]">
                                         Cargando inventario...
                                     </td>
                                 </tr>
                             ) :
-                                (compFiltrados?.map(
-                                    (computador) => (
-                                        <tr
-                                            key={computador.codigo}
-                                            className="border-t border-[#303747] transition hover:bg-[#23202a] hover:brightness-110 hover:shadow-lg text-center"
-                                        >
-                                            <td className="px-3 py-4 font-bold text-[#ff8b6a]">
-                                                {
-                                                    computador.codigo
-                                                }
+                                errorActivos ? (
+                                    <tr>
+                                        <td colSpan={6} className="px-3 py-10 text-center">
+                                            <p role="alert">No se pudo cargar el inventario.</p>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => void refetch()}
+                                                disabled={isFetching}
+                                                className="mt-3 rounded-lg border px-3 py-2 disabled:opacity-50"
+                                            >
+                                                {isFetching ? "Reintentando…" : "Reintentar"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ) :
+
+                                    activos.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={6} className="px-3 py-10 text-center">
+                                                No hay activos registrados.
                                             </td>
+                                        </tr>
+                                    ) :
 
-                                            <td className="px-3 py-4">
-                                                <strong>
-                                                    {
-                                                        computador.marca
-                                                    }{" "}
-                                                    {
-                                                        computador.modelo
-                                                    }
-                                                </strong>
+                                        activosFiltrados.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={6} className="px-3 py-10 text-center">
+                                                    No hay activos que coincidan con los filtros.
+                                                </td>
+                                            </tr>
+                                        ) :
+                                            (activosFiltrados.map(
+                                                (activo) => (
+                                                    <tr
+                                                        key={activo.id}
+                                                        className="border-t border-[#303747] transition hover:bg-[#23202a] hover:brightness-110 hover:shadow-lg text-center"
+                                                    >
+                                                        <td className="px-3 py-4 font-bold text-[#ff8b6a]">
+                                                            {
+                                                                activo.codigo
+                                                            }
+                                                        </td>
 
-                                                <small className="block text-xs text-[#b2b7c8]">
-                                                    {
-                                                        computador.tipo
-                                                    }{" "}
-                                                    ·{" "}
-                                                    {
-                                                        computador.serial
-                                                    }
-                                                </small>
-                                            </td>
+                                                        <td className="px-3 py-4">
+                                                            <strong>
+                                                                {
+                                                                    activo.marca
+                                                                }{" "}
+                                                                {
+                                                                    activo.modelo
+                                                                }
+                                                            </strong>
 
-                                            <td className="px-3 py-4">
-                                                {
-                                                    computador.responsable
-                                                }
-                                            </td>
+                                                            <small className="block text-xs text-[#b2b7c8]">
+                                                                {
+                                                                    activo.tipo
+                                                                }{" "}
+                                                                ·{" "}
+                                                                {
+                                                                    activo.serial
+                                                                }
+                                                            </small>
+                                                        </td>
 
-                                            <td className="px-3 py-4 text-[#b2b7c8]">
-                                                {
-                                                    computador.ubicacion
-                                                }
-                                            </td>
+                                                        <td className="px-3 py-4">
+                                                            {
+                                                                activo.responsable
+                                                            }
+                                                        </td>
 
-                                            <td className="px-3 py-4">
-                                                <span
-                                                    className={`rounded-full px-2 py-1 text-[10px] font-bold ${computador.estado ===
-                                                        "Asignado"
-                                                        ? "bg-[#493423] text-[#ffb36b]"
-                                                        : computador.estado ===
-                                                            "En reparación"
-                                                            ? "bg-[#43252c] text-[#ff8b6a]"
-                                                            : computador.estado ===
-                                                                "Disponible"
-                                                                ? "bg-[#263b36] text-[#a8d36b]"
-                                                                : "bg-[#303747] text-[#b2b7c8]"
-                                                        }`}
-                                                >
-                                                    {
-                                                        computador.estado
-                                                    }
-                                                </span>
-                                            </td>
+                                                        <td className="px-3 py-4 text-[#b2b7c8]">
+                                                            {
+                                                                activo.ubicacion
+                                                            }
+                                                        </td>
 
-                                            <td className="px-3 py-4">
-                                                <button
-                                                    type="button"
-                                                    className="bg-[#e35d62]
+                                                        <td className="px-3 py-4">
+                                                            <span
+                                                                className={`rounded-full px-2 py-1 text-[10px] font-bold ${activo.estado ===
+                                                                    "Asignado"
+                                                                    ? "bg-[#493423] text-[#ffb36b]"
+                                                                    : activo.estado ===
+                                                                        "En reparación"
+                                                                        ? "bg-[#43252c] text-[#ff8b6a]"
+                                                                        : activo.estado ===
+                                                                            "Disponible"
+                                                                            ? "bg-[#263b36] text-[#a8d36b]"
+                                                                            : "bg-[#303747] text-[#b2b7c8]"
+                                                                    }`}
+                                                            >
+                                                                {
+                                                                    activo.estado
+                                                                }
+                                                            </span>
+                                                        </td>
+
+                                                        <td className="px-3 py-4">
+                                                            <button
+                                                                type="button"
+                                                                className="bg-[#e35d62]
                                                                 hover:bg-[#ff8b6a]
                                                                 text-white
                                                                 px-4 py-2
                                                                 rounded-lg
                                                                 transition-colors
                                                                 duration-200"
-                                                    onClick={() =>
-                                                        setSeleccionado(
-                                                            computador.id,
-                                                        )
-                                                    }
-                                                >
-                                                    Ver detalle
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ),
-                                ))}
+                                                                onClick={() =>
+                                                                    setSeleccionado(
+                                                                        activo.id,
+                                                                    )
+                                                                }
+                                                            >
+                                                                Ver detalle
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ),
+                                            ))}
                         </tbody>
                     </table>
                 </div>
 
-                <p className="mt-4 text-xs text-[#b2b7c8]">
-                    Mostrando {compFiltrados?.length} de{" "}
-                    {computers?.length} activos · Datos de
-                    demostración
-                </p>
+                {!loadingActivos && !errorActivos &&
+                    (
+                        <p className="mt-4 text-xs text-[#b2b7c8]">
+                            Mostrando {activosFiltrados.length} de{" "}
+                            {activos.length} activos
+                        </p>
+                    )}
             </div>
         </section>
     )
