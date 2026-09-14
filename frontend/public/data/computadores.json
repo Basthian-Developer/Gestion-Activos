@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "activo_id": 1,
+        "direccion_ip": "10.0.0.0",
+        "direccion_mac": "ASDB-SADAS-DSADA",
+        "os": "Windows 11",
+        "procesador": "Intel I5 3000",
+        "ram_size": "16 GB",
+        "ram_type": "SSD",
+        "storage_type": "SSD",
+        "storage_size": "256 GB"
+    }
+]

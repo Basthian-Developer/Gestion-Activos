@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "serial": "ASDAS-434134-131231",
+    "ubicacion": "SST - Piso 1",
+    "responsable": "Basthian Flores",
+    "estado": "Asignado",
+    "codigo": "TS-05-02",
+    "marca": "Lenovo",
+    "modelo": "Thinkpad",
+    "tipo": "Notebook"
+  }
+]

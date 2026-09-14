@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+:root {
+--rojo-control: #e35d62;
+--coral: #ff8b6a;
+--ambar: #ffb36b;
+--grafito: #10131b;
+--superficie: #191e29;
+--borde: #303747;
+}
+
+*,
+*::before,
+*::after {
+box-sizing: border-box;
+}
+
+html,
+body {
+width: 100%;
+min-width: 100%;
+min-height: 100%;
+margin: 0;
+padding: 0;
+}
+
+html {
+background: var(--grafito);
+}
+
+body {
+min-height: 100vh;
+overflow-x: hidden;
+font-family: "Work Sans", "Segoe UI", sans-serif;
+background: var(--grafito);
+}
+
+#root {
+width: 100%;
+min-width: 100%;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+}
+
+/* Contenedor principal de la aplicación */
+.ambient-shell {
+width: 100%;
+min-height: 100vh;
+flex: 1;
+
+background-color: var(--grafito);
+
+background-image:
+radial-gradient(
+circle at 78% 0%,
+rgba(227, 93, 98, 0.18),
+transparent 28%
+),
+radial-gradient(
+circle at 12% 80%,
+rgba(255, 139, 106, 0.08),
+transparent 24%
+);
+}
+
+/* Botón reutilizable */
+.action-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+
+border: 0;
+border-radius: 0.65rem;
+
+background: linear-gradient(
+135deg,
+var(--rojo-control),
+#a63f50
+);
+
+padding: 0.7rem 1rem;
+
+font-size: 0.75rem;
+font-weight: 700;
+line-height: 1;
+
+color: #fff;
+
+cursor: pointer;
+
+box-shadow: 0 8px 20px rgba(227, 93, 98, 0.2);
+
+transition:
+transform 0.2s ease,
+filter 0.2s ease,
+box-shadow 0.2s ease;
+}
+
+.action-button:hover {
+filter: brightness(1.1);
+transform: translateY(-1px);
+
+box-shadow: 0 10px 24px rgba(227, 93, 98, 0.28);
+}
+
+.action-button:active {
+transform: translateY(0);
+}
+
+/* Historial / timeline */
+.assignment-log {
+width: 100%;
+display: grid;
+gap: 0;
+}
+
+.assignment-event {
+width: 100%;
+
+display: grid;
+grid-template-columns: 2.25rem minmax(0, 1fr);
+
+gap: 1rem;
+
+min-height: 8.8rem;
+}
+
+.assignment-rail {
+position: relative;
+
+display: flex;
+justify-content: center;
+align-items: flex-start;
+}
+
+.assignment-rail::after {
+content: "";
+
+position: absolute;
+
+top: 2.4rem;
+bottom: 0;
+
+width: 1px;
+
+background: linear-gradient(
+var(--coral),
+var(--borde)
+);
+}
+
+.assignment-event:last-child .assignment-rail::after {
+display: none;
+}
+
+.assignment-node {
+position: relative;
+z-index: 1;
+
+display: grid;
+place-items: center;
+
+width: 2.15rem;
+height: 2.15rem;
+
+flex-shrink: 0;
+
+border: 1px solid rgba(255, 139, 106, 0.4);
+border-radius: 50%;
+
+color: var(--coral);
+
+background: #43252c;
+
+box-shadow:
+0 0 0 6px rgba(67, 37, 44, 0.4);
+
+font-size: 0.75rem;
+}
+
+.assignment-node.current {
+color: #fff;
+
+background: var(--rojo-control);
+
+box-shadow:
+0 0 0 6px rgba(227, 93, 98, 0.15),
+0 0 24px rgba(227, 93, 98, 0.45);
+}
+
+/* Evita que contenido flex/grid se desborde */
+main,
+section,
+article,
+aside,
+header,
+footer,
+nav {
+min-width: 0;
+}
+
+img,
+svg,
+video,
+canvas {
+max-width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+.assignment-event {
+grid-template-columns: 2rem minmax(0, 1fr);
+gap: 0.7rem;
+min-height: 7.5rem;
+}
+
+.assignment-node {
+width: 1.9rem;
+height: 1.9rem;
+}
+
+.assignment-rail::after {
+top: 2.15rem;
+}
+
+.assignment-event .flex {
+align-items: flex-start;
+flex-direction: column;
+}
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+*,
+*::before,
+*::after {
+scroll-behavior: auto !important;
+transition-duration: 0.01ms !important;
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+}
+}
+
+
+@keyframes entrarDesdeDerecha {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.entrada-lateral {
+    animation: entrarDesdeDerecha 300ms ease-out;
+}
