@@ -1,14 +1,14 @@
 import JsonComputerRepository from "@/repositories/json/JsonComputerRepository";
 import JsonActivoRepository from "@/repositories/json/JsonActivoRepository";
+import JsonPrinterRepository from "@/repositories/json/JsonPrinterRepository";
+import JsonPerifericoRepository from "@/repositories/json/JsonPerifericoRepository";
 
-const modo = import.meta.env.VITE_BUILD_MODE;
+//const modo = import.meta.env.VITE_BUILD_MODE;
 
-export const computerRepository =
-    modo === "demo" ?
-        new JsonComputerRepository() :
-        new JsonComputerRepository()
+export const computerRepository = new JsonComputerRepository();
 
-export const activoRepository =
-    modo === "demo" ?
-        new JsonActivoRepository() :
-        new JsonActivoRepository()
+export const activoRepository = new JsonActivoRepository();
+
+export const printerRepository = new JsonPrinterRepository();
+
+export const perifericoRepository = new JsonPerifericoRepository();
