@@ -1,4 +1,4 @@
-import { computerRepository, activoRepository } from '@/config/dependencias'
+import { computerRepository, activoRepository } from '@dependencies'
 
 export async function getAll() {
     const [activos, computadores] = await Promise.all([

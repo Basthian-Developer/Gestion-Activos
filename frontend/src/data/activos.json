@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "serial": "DEMO-2026-0001",
+    "ubicacion": "Administración - Piso 2",
+    "responsable": "Camila Rojas",
+    "estado": "Asignado",
+    "codigo": "CMP-001",
+    "marca": "Lenovo",
+    "modelo": "ThinkPad T14",
+    "tipo": "Notebook"
+  },
+  {
+    "id": 2,
+    "serial": "DEMO-2026-0002",
+    "ubicacion": "Recepción - Piso 1",
+    "responsable": "Diego Morales",
+    "estado": "Asignado",
+    "codigo": "IMP-001",
+    "marca": "HP",
+    "modelo": "LaserJet Pro M404dn",
+    "tipo": "Impresora"
+  },
+  {
+    "id": 3,
+    "serial": "DEMO-2026-0003",
+    "ubicacion": "Bodega TI",
+    "responsable": "Sin asignar",
+    "estado": "Disponible",
+    "codigo": "PER-001",
+    "marca": "Logitech",
+    "modelo": "M185",
+    "tipo": "Mouse"
+  },
+  {
+    "id": 4,
+    "serial": "DEMO-2026-0004",
+    "ubicacion": "Contabilidad - Piso 3",
+    "responsable": "Valentina Soto",
+    "estado": "Asignado",
+    "codigo": "CMP-002",
+    "marca": "Dell",
+    "modelo": "OptiPlex 7090",
+    "tipo": "Desktop"
+  },
+  {
+    "id": 5,
+    "serial": "DEMO-2026-0005",
+    "ubicacion": "Soporte TI - Piso 1",
+    "responsable": "Tomás Herrera",
+    "estado": "En reparación",
+    "codigo": "CMP-003",
+    "marca": "HP",
+    "modelo": "ProBook 440 G9",
+    "tipo": "Notebook"
+  },
+  {
+    "id": 6,
+    "serial": "DEMO-2026-0006",
+    "ubicacion": "Bodega TI",
+    "responsable": "Sin asignar",
+    "estado": "Disponible",
+    "codigo": "CMP-004",
+    "marca": "Lenovo",
+    "modelo": "ThinkCentre M70s",
+    "tipo": "Desktop"
+  },
+  {
+    "id": 7,
+    "serial": "DEMO-2026-0007",
+    "ubicacion": "Archivo - Piso 1",
+    "responsable": "Sin asignar",
+    "estado": "Baja",
+    "codigo": "CMP-005",
+    "marca": "Dell",
+    "modelo": "Latitude 5420",
+    "tipo": "Notebook"
+  },
+  {
+    "id": 8,
+    "serial": "DEMO-2026-0008",
+    "ubicacion": "Recursos Humanos - Piso 2",
+    "responsable": "Javiera Muñoz",
+    "estado": "Asignado",
+    "codigo": "IMP-002",
+    "marca": "Brother",
+    "modelo": "HL-L2350DW",
+    "tipo": "Impresora"
+  },
+  {
+    "id": 9,
+    "serial": "DEMO-2026-0009",
+    "ubicacion": "Diseño - Piso 3",
+    "responsable": "Matías Torres",
+    "estado": "En reparación",
+    "codigo": "IMP-003",
+    "marca": "Canon",
+    "modelo": "imageCLASS LBP623Cdw",
+    "tipo": "Impresora"
+  },
+  {
+    "id": 10,
+    "serial": "DEMO-2026-0010",
+    "ubicacion": "Bodega TI",
+    "responsable": "Sin asignar",
+    "estado": "Disponible",
+    "codigo": "IMP-004",
+    "marca": "HP",
+    "modelo": "Color LaserJet Pro M255dw",
+    "tipo": "Impresora"
+  },
+  {
+    "id": 11,
+    "serial": "DEMO-2026-0011",
+    "ubicacion": "Archivo - Piso 1",
+    "responsable": "Sin asignar",
+    "estado": "Baja",
+    "codigo": "IMP-005",
+    "marca": "Brother",
+    "modelo": "HL-L3270CDW",
+    "tipo": "Impresora"
+  },
+  {
+    "id": 12,
+    "serial": "DEMO-2026-0012",
+    "ubicacion": "Contabilidad - Piso 3",
+    "responsable": "Valentina Soto",
+    "estado": "Asignado",
+    "codigo": "PER-002",
+    "marca": "Dell",
+    "modelo": "KB216",
+    "tipo": "Teclado"
+  },
+  {
+    "id": 13,
+    "serial": "DEMO-2026-0013",
+    "ubicacion": "Sala de reuniones - Piso 2",
+    "responsable": "Camila Rojas",
+    "estado": "Asignado",
+    "codigo": "PER-003",
+    "marca": "Logitech",
+    "modelo": "C920",
+    "tipo": "Webcam"
+  },
+  {
+    "id": 14,
+    "serial": "DEMO-2026-0014",
+    "ubicacion": "Bodega TI",
+    "responsable": "Sin asignar",
+    "estado": "Disponible",
+    "codigo": "PER-004",
+    "marca": "Kingston",
+    "modelo": "DataTraveler Exodia",
+    "tipo": "Pendrive"
+  },
+  {
+    "id": 15,
+    "serial": "DEMO-2026-0015",
+    "ubicacion": "Soporte TI - Piso 1",
+    "responsable": "Tomás Herrera",
+    "estado": "En reparación",
+    "codigo": "PER-005",
+    "marca": "Logitech",
+    "modelo": "H390",
+    "tipo": "Audífonos"
+  }
+]

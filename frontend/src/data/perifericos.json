@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "activo_id": 3,
+    "conexion": "Inalámbrica con receptor USB",
+    "puerto": "USB 2.0"
+  },
+  {
+    "id": 2,
+    "activo_id": 12,
+    "conexion": "USB",
+    "puerto": "USB 2.0"
+  },
+  {
+    "id": 3,
+    "activo_id": 13,
+    "conexion": "USB",
+    "puerto": "USB 2.0"
+  },
+  {
+    "id": 4,
+    "activo_id": 14,
+    "conexion": "USB",
+    "puerto": "USB 3.2 Gen 1"
+  },
+  {
+    "id": 5,
+    "activo_id": 15,
+    "conexion": "USB",
+    "puerto": "USB 2.0"
+  }
+]

@@ -1,4 +1,4 @@
-import { printerRepository, activoRepository } from "@/config/dependencias";
+import { printerRepository, activoRepository } from "@dependencies";
 
 export async function getAll() {
     const [impresoras, activos] = await Promise.all([

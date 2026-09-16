@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "activo_id": 2,
+    "conexion": "Ethernet",
+    "toner": "HP 58A",
+    "direccionIp": "192.168.10.201",
+    "color": "Negro"
+  },
+  {
+    "id": 2,
+    "activo_id": 8,
+    "conexion": "Wi-Fi",
+    "toner": "Brother TN-730",
+    "direccionIp": "192.168.10.202",
+    "color": "Negro"
+  },
+  {
+    "id": 3,
+    "activo_id": 9,
+    "conexion": "Ethernet",
+    "toner": "Canon 054",
+    "direccionIp": "192.168.10.203",
+    "color": "Color"
+  },
+  {
+    "id": 4,
+    "activo_id": 10,
+    "conexion": "Wi-Fi",
+    "toner": "HP 206A",
+    "direccionIp": "192.168.10.204",
+    "color": "Color"
+  },
+  {
+    "id": 5,
+    "activo_id": 11,
+    "conexion": "Ethernet",
+    "toner": "Brother TN-223",
+    "direccionIp": "192.168.10.205",
+    "color": "Color"
+  }
+]

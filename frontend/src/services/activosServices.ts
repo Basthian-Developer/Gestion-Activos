@@ -1,4 +1,4 @@
-import { activoRepository } from "@/config/dependencias";
+import { activoRepository } from "@dependencies";
 
 export async function getAll(){
     return activoRepository.getAll();

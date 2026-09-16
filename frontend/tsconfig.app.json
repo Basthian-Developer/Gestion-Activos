@@ -8,7 +8,8 @@
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@dependencies": ["./src/config/dependencies/api.ts"]
     },
 
     /* Bundler mode */

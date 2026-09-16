@@ -1,4 +1,4 @@
-import { perifericoRepository, activoRepository } from "@/config/dependencias";
+import { perifericoRepository, activoRepository } from "@dependencies";
 
 export async function getAll() {
     const [perifericos, activos] = await Promise.all([
