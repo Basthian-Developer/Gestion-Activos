@@ -6,6 +6,7 @@
   "scripts": {
     "dev:json": "vite --mode json",
     "dev:api": "vite --mode api",
+    "build": "tsc -b && vite build",
     "build:json": "tsc -b && vite build --mode json",
     "build:api": "tsc -b && vite build --mode api",
     "build:github-pages": "tsc -b && vite build --mode github-pages",

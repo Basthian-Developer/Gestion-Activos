@@ -9,7 +9,8 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@dependencies": ["./src/config/dependencies/api.ts"]
+      "@dependencies": ["./src/config/dependencies/api.ts"],
+      "@data": ["./src/data"]
     },
 
     /* Bundler mode */
