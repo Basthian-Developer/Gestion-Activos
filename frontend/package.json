@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev": "vite dev",
     "dev:json": "vite --mode json",
     "dev:api": "vite --mode api",
     "build": "tsc -b && vite build",

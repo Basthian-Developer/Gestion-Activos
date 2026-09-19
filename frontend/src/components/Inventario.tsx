@@ -1,5 +1,7 @@
 import { useActivos } from "@/hooks/useActivos";
 import { useEffect, useState } from "react";
+import DetalleComputador from "@/components/DetallesComputador";
+import DetalleImpresora from "./DetallesImpresoras";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
 
@@ -8,7 +10,7 @@ export default function Inventario() {
     const [busqueda, setBusqueda] = useState<string>("");
     const [estado, setEstado] = useState<Estado | "">("");
     const [tipo, setTipo] = useState<string>("");
-    const [_seleccionado, setSeleccionado] = useState<number | null>(null);
+    const [seleccionado, setSeleccionado] = useState<number | null>(null);
 
     const activos = data ?? [];
 
@@ -32,6 +34,10 @@ export default function Inventario() {
         setEstado("");
         setTipo("");
     };
+
+    const activoSeleccionado = activos.find(
+        (activo) => activo.id === seleccionado
+    );
 
     useEffect(() => {
         if (errorActivos) {
@@ -300,6 +306,25 @@ export default function Inventario() {
                         </p>
                     )}
             </div>
+            {seleccionado != null &&
+                (activoSeleccionado?.tipo === "Notebook" || 
+                activoSeleccionado?.tipo === "Desktop")
+                && (
+                    <DetalleComputador
+                        abierto={seleccionado !== null}
+                        onCerrar={() => setSeleccionado(null)}
+                        id={seleccionado}
+                    />
+                )}
+
+            {seleccionado != null &&
+                (activoSeleccionado?.tipo === "Impresora")
+                && (
+                    <DetalleImpresora
+                        onCerrar={() => setSeleccionado(null)}
+                        id={seleccionado}
+                    />
+                )}
         </section>
     )
 }
