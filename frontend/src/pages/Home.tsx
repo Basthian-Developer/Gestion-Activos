@@ -303,8 +303,6 @@ export function Home() {
 
     const activosCount = activos.length;
 
-    const [_detalleAbierto, setDetalleAbierto] = useState<boolean>(false);
-
     return (
         <div className="min-h-screen bg-[#10131b] text-[#f4f6ff] font-sans ambient-shell lg:flex">
             {sidebarAbierta && (
@@ -550,18 +548,6 @@ export function Home() {
                                         aria-hidden="true"
                                     />{" "}
                                     Registrar activo
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="action-button"
-                                    onClick={() => setDetalleAbierto(true)}
-                                >
-                                    <i
-                                        className="fa-solid fa-eye"
-                                        aria-hidden="true"
-                                    />{" "}
-                                    Probar detalle
                                 </button>
                             </div>
 
