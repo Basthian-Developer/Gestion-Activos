@@ -303,7 +303,7 @@ export function Home() {
 
     const activosCount = activos.length;
 
-    const [detalleAbierto, setDetalleAbierto] = useState<boolean>(false);
+    const [_detalleAbierto, setDetalleAbierto] = useState<boolean>(false);
 
     return (
         <div className="min-h-screen bg-[#10131b] text-[#f4f6ff] font-sans ambient-shell lg:flex">
