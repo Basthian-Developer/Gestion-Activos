@@ -29,7 +29,7 @@ export default function DetalleImpresora({
         if(impresora){
             console.log(impresora);
         }
-    }, [impresora]);
+    }, [impresora, data, id, isLoading]);
 
     return (
         <>

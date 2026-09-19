@@ -12,8 +12,6 @@ export default function DetalleComputador({
     onCerrar,
     id
 }: DetalleComputadorProps) {
-    
-
     const {data, isLoading, error} = useComputadores();
 
     const computador = data?.find(
@@ -33,7 +31,7 @@ export default function DetalleComputador({
         if(computador){
             console.log(computador);
         }
-    }, [computador]);
+    }, [computador, data, isLoading, id]);
     
     if (!abierto) return null;
 
