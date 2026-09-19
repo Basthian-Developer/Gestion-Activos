@@ -10,7 +10,12 @@
     "paths": {
       "@/*": ["./src/*"],
       "@dependencies": ["./src/config/dependencies/api.ts"],
-      "@data": ["./src/data"]
+      "@data": ["./src/data"],
+      "@hooks": ["./src/hooks"],
+      "@repositories": ["./src/repositories"],
+      "@services": ["./src/services"],
+      "@models": ["./src/models"],
+      "@config": ["./src/config"]
     },
 
     /* Bundler mode */

@@ -303,6 +303,8 @@ export function Home() {
 
     const activosCount = activos.length;
 
+    const [detalleAbierto, setDetalleAbierto] = useState<boolean>(false);
+
     return (
         <div className="min-h-screen bg-[#10131b] text-[#f4f6ff] font-sans ambient-shell lg:flex">
             {sidebarAbierta && (
@@ -549,12 +551,24 @@ export function Home() {
                                     />{" "}
                                     Registrar activo
                                 </button>
+
+                                <button
+                                    type="button"
+                                    className="action-button"
+                                    onClick={() => setDetalleAbierto(true)}
+                                >
+                                    <i
+                                        className="fa-solid fa-eye"
+                                        aria-hidden="true"
+                                    />{" "}
+                                    Probar detalle
+                                </button>
                             </div>
 
                             {/*======================================================================
                                 Contadores
                             ======================================================================*/}
-                            <div className="mb-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                            <div className="mb-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                                 {[
                                     [
                                         "Activos registrados",
@@ -579,12 +593,12 @@ export function Home() {
                                 ].map(([label, value, icon], index) => (
                                     <article
                                         key={String(label)}
-                                        className={`rounded-2xl border p-5 shadow-xl transition-transform duration-300 hover:scale-105 ${index === 0
+                                        className={`grid grid-rows-[3rem_1fr_auto] rounded-2xl w-full border p-5 shadow-xl transition-transform duration-300 hover:scale-105 ${index === 0
                                             ? "border-[#e35d6266] bg-gradient-to-br from-[#a63f50] to-[#241517]"
                                             : "border-[#303747] bg-[#191e29]"
                                             }`}
                                     >
-                                        <div className="flex items-center justify-between text-sm text-[#b2b7c8]">
+                                        <div className="flex h-10 items-center justify-between text-sm text-[#b2b7c8]">
                                             <span>{label}</span>
                                             <span className="text-[#ff8b6a]">
                                                 <i
