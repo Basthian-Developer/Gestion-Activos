@@ -1,9 +1,16 @@
 import { useActivos } from "@/hooks/useActivos";
 import { useEffect, useState } from "react";
+import { useTable, tableFeatures, rowPaginationFeature, createPaginatedRowModel, createColumnHelper } from "@tanstack/react-table"
 import DetalleComputador from "@/components/DetallesComputador";
 import DetalleImpresora from "./DetallesImpresoras";
+import type Activo from "@/models/Activo";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
+
+const features = tableFeatures({
+    rowPaginationFeature,
+    paginatedRowModel: createPaginatedRowModel(),
+})
 
 export default function Inventario() {
     const { data, isLoading: loadingActivos, error: errorActivos, refetch, isFetching } = useActivos();
@@ -37,6 +44,80 @@ export default function Inventario() {
 
     const activoSeleccionado = activos.find(
         (activo) => activo.id === seleccionado
+    );
+
+    const columnHelper = createColumnHelper<typeof features, Activo>();
+
+    const columns = columnHelper.columns([
+        columnHelper.accessor("codigo", {
+            header: "Código",
+        }),
+
+        columnHelper.display({
+            id: "activo",
+            header: "Activo",
+            cell: ({ row }) => (
+                <div>
+                    <strong>
+                        {row.original.marca} {row.original.modelo}
+                    </strong>
+
+                    <small className="block text-xs text-[#b2b7c8]">
+                        {row.original.tipo} · {row.original.serial}
+                    </small>
+                </div>
+            ),
+        }),
+
+        columnHelper.accessor("responsable", {
+            header: "Responsable",
+        }),
+
+        columnHelper.accessor("ubicacion", {
+            header: "Ubicación",
+        }),
+
+        columnHelper.accessor("estado", {
+            header: "Estado",
+        }),
+
+        columnHelper.display({
+            id: "acciones",
+            header: "",
+            cell: ({ row }) => (
+                <button
+                    type="button"
+                    className="
+                    bg-[#e35d62]
+                    hover:bg-[#ff8b6a]
+                    text-white
+                    px-4 py-2
+                    rounded-lg
+                    transition-colors
+                    duration-200
+                "
+                    onClick={() => setSeleccionado(row.original.id)}
+                >
+                    Ver detalle
+                </button>
+            ),
+        }),
+    ]);
+
+    const table = useTable(
+        {
+            features,
+            columns,
+            data: activosFiltrados,
+
+            initialState: {
+                pagination: {
+                    pageIndex: 0,
+                    pageSize: 10,
+                },
+            },
+        },
+        (state) => ({pagination: state.pagination})
     );
 
     useEffect(() => {
@@ -207,108 +288,62 @@ export default function Inventario() {
                                                 </td>
                                             </tr>
                                         ) :
-                                            (activosFiltrados.map(
-                                                (activo) => (
+                                            (
+                                                table.getRowModel().rows.map((row) => (
                                                     <tr
-                                                        key={activo.id}
+                                                        key={row.id}
                                                         className="border-t border-[#303747] transition hover:bg-[#23202a] hover:brightness-110 hover:shadow-lg text-center"
                                                     >
-                                                        <td className="px-3 py-4 font-bold text-[#ff8b6a]">
-                                                            {
-                                                                activo.codigo
-                                                            }
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            <strong>
-                                                                {
-                                                                    activo.marca
-                                                                }{" "}
-                                                                {
-                                                                    activo.modelo
-                                                                }
-                                                            </strong>
-
-                                                            <small className="block text-xs text-[#b2b7c8]">
-                                                                {
-                                                                    activo.tipo
-                                                                }{" "}
-                                                                ·{" "}
-                                                                {
-                                                                    activo.serial
-                                                                }
-                                                            </small>
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            {
-                                                                activo.responsable
-                                                            }
-                                                        </td>
-
-                                                        <td className="px-3 py-4 text-[#b2b7c8]">
-                                                            {
-                                                                activo.ubicacion
-                                                            }
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            <span
-                                                                className={`rounded-full px-2 py-1 text-[10px] font-bold ${activo.estado ===
-                                                                    "Asignado"
-                                                                    ? "bg-[#493423] text-[#ffb36b]"
-                                                                    : activo.estado ===
-                                                                        "En reparación"
-                                                                        ? "bg-[#43252c] text-[#ff8b6a]"
-                                                                        : activo.estado ===
-                                                                            "Disponible"
-                                                                            ? "bg-[#263b36] text-[#a8d36b]"
-                                                                            : "bg-[#303747] text-[#b2b7c8]"
-                                                                    }`}
+                                                        {row.getAllCells().map((cell) => (
+                                                            <td
+                                                                key={cell.id}
+                                                                className="px-3 py-4"
                                                             >
-                                                                {
-                                                                    activo.estado
-                                                                }
-                                                            </span>
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            <button
-                                                                type="button"
-                                                                className="bg-[#e35d62]
-                                                                hover:bg-[#ff8b6a]
-                                                                text-white
-                                                                px-4 py-2
-                                                                rounded-lg
-                                                                transition-colors
-                                                                duration-200"
-                                                                onClick={() =>
-                                                                    setSeleccionado(
-                                                                        activo.id,
-                                                                    )
-                                                                }
-                                                            >
-                                                                Ver detalle
-                                                            </button>
-                                                        </td>
+                                                                <table.FlexRender cell={cell} />
+                                                            </td>
+                                                        ))}
                                                     </tr>
-                                                ),
-                                            ))}
+                                                ))
+                                            )}
                         </tbody>
                     </table>
+                    <div className="mt-4 flex items-center justify-between">
+                        <button
+                            type="button"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                            className="rounded-lg border border-[#303747] px-4 py-2 text-sm text-[#f4f6ff] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            Anterior
+                        </button>
+
+                        <span className="text-sm text-[#b2b7c8]">
+                            Página {table.state.pagination.pageIndex + 1} de{" "}
+                            {table.getPageCount()}
+                        </span>
+
+                        <button
+                            type="button"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                            className="rounded-lg border border-[#303747] px-4 py-2 text-sm text-[#f4f6ff] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                 </div>
 
                 {!loadingActivos && !errorActivos &&
                     (
                         <p className="mt-4 text-xs text-[#b2b7c8]">
-                            Mostrando {activosFiltrados.length} de{" "}
-                            {activos.length} activos
+                            Mostrando {table.getRowModel().rows.length} de{" "}
+                            {activosFiltrados.length} activos
                         </p>
                     )}
             </div>
             {seleccionado != null &&
-                (activoSeleccionado?.tipo === "Notebook" || 
-                activoSeleccionado?.tipo === "Desktop")
+                (activoSeleccionado?.tipo === "Notebook" ||
+                    activoSeleccionado?.tipo === "Desktop")
                 && (
                     <DetalleComputador
                         abierto={seleccionado !== null}

@@ -12,27 +12,21 @@ export default function DetalleComputador({
     onCerrar,
     id
 }: DetalleComputadorProps) {
-    const {data, isLoading, error} = useComputadores();
+    const { data, isLoading, error } = useComputadores();
 
-    const computador = data?.find(
+    const computadores = data ?? [];
+
+    const computador = computadores.find(
         (computador) => computador.activo_id === id
-    );
+    ) ?? null;
+
 
     useEffect(() => {
-        if(error){
+        if (error) {
             console.error(error);
         }
     }, [error]);
 
-    useEffect(() => {
-        if(!isLoading && data && !computador){
-            console.error(`No se encontro el computador a partir del activo asociado con id: ${id}`);
-        }
-        if(computador){
-            console.log(computador);
-        }
-    }, [computador, data, isLoading, id]);
-    
     if (!abierto) return null;
 
     return (
@@ -56,7 +50,7 @@ export default function DetalleComputador({
                         </p>
 
                         <h2 className="mt-2 font-serif text-3xl">
-                            Lenovo ThinkPad E14
+                            {computador?.marca} {computador?.modelo}
                         </h2>
                     </div>
 
@@ -73,7 +67,7 @@ export default function DetalleComputador({
                 {/* Código y estado */}
                 <div className="rounded-xl bg-[#43252c] p-4">
                     <div className="flex justify-between text-sm font-bold">
-                        <span>TS-EQ-0142</span>
+                        <span>{computador?.codigo}</span>
 
                         <span className="text-[#ffb36b]">
                             Asignado
@@ -83,30 +77,40 @@ export default function DetalleComputador({
 
                 {/* Información */}
                 <dl className="mt-6 grid grid-cols-2 gap-4">
-                    {[
-                        ["Tipo", "Notebook"],
-                        ["Serie", "LNV-8841-CC"],
-                        ["Responsable", "Camila Reyes"],
-                        ["Ubicación", "Casa Matriz · Piso 3"],
-                        ["Condición", "Buena"],
-                        ["Garantía", "14 marzo 2027"],
-                    ].map(([label, value]) => (
-                        <div
-                            key={label}
-                            className="border-b border-[#303747] pb-3"
-                        >
-                            <dt className="text-[10px] uppercase text-[#b2b7c8]">
-                                {label}
-                            </dt>
+                    {isLoading ? (
+                        <div>Cargando...</div>
+                    ) :
 
-                            <dd className="mt-1 text-sm font-semibold">
-                                {value}
-                            </dd>
-                        </div>
-                    ))}
+                        error || computador === null ? (
+                            <div>Dispositivo no disponible</div>
+                        )
+                            : ([
+                                ["Tipo", computador.tipo],
+                                ["Serie", computador.serial],
+                                ["Responsable", computador.responsable],
+                                ["Ubicación", computador.ubicacion],
+                                ["Sistema Operativo", computador.os],
+                                ["Dirección IP", computador.direccion_ip],
+                                ["MAC", computador.direccion_mac],
+                                ["Procesador", computador.procesador],
+                                ["RAM", `${computador.ram_type} ${computador.ram_size}`],
+                            ].map(([label, value]) => (
+                                <div
+                                    key={label}
+                                    className="border-b border-[#303747] pb-3"
+                                >
+                                    <dt className="text-[10px] uppercase text-[#b2b7c8]">
+                                        {label}
+                                    </dt>
+
+                                    <dd className="mt-1 text-sm font-semibold">
+                                        {value}
+                                    </dd>
+                                </div>
+                            )))}
                 </dl>
 
-                {/* Historial */}
+                {/* Historial 
                 <h3 className="mt-8 font-serif text-xl">
                     Historial
                 </h3>
@@ -133,7 +137,7 @@ export default function DetalleComputador({
                     </div>
                 </div>
 
-                {/* Acciones */}
+                 Acciones 
                 <button
                     type="button"
                     className="action-button mt-8 w-full justify-center"
@@ -143,7 +147,7 @@ export default function DetalleComputador({
                         aria-hidden="true"
                     />{" "}
                     Registrar movimiento
-                </button>
+                </button>*/}
             </aside>
         </>
     );
