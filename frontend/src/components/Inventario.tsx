@@ -1,16 +1,12 @@
 import { useActivos } from "@/hooks/useActivos";
-import { useEffect, useState } from "react";
-import { useTable, tableFeatures, rowPaginationFeature, createPaginatedRowModel, createColumnHelper } from "@tanstack/react-table"
+import { useEffect, useState, useMemo } from "react";
+import { useReactTable, getCoreRowModel, getPaginationRowModel, createColumnHelper, flexRender } from "@tanstack/react-table"
 import DetalleComputador from "@/components/DetallesComputador";
 import DetalleImpresora from "./DetallesImpresoras";
+import DetallePeriferico from "./DetallesPerifericos";
 import type Activo from "@/models/Activo";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
-
-const features = tableFeatures({
-    rowPaginationFeature,
-    paginatedRowModel: createPaginatedRowModel(),
-})
 
 export default function Inventario() {
     const { data, isLoading: loadingActivos, error: errorActivos, refetch, isFetching } = useActivos();
@@ -19,22 +15,28 @@ export default function Inventario() {
     const [tipo, setTipo] = useState<string>("");
     const [seleccionado, setSeleccionado] = useState<number | null>(null);
 
-    const activos = data ?? [];
+    const activos = useMemo(() => data ?? [], [data]);
 
     const tiposDisponibles = [...new Set(activos.map((c) => c.tipo))];
-    const textoBusqueda = busqueda.trim().toLowerCase();
-    const activosFiltrados = activos.filter((c) => {
-        const coincideBusqueda =
-            !busqueda ||
-            `${c.codigo} ${c.marca} ${c.modelo} ${c.responsable}`
-                .toLowerCase()
-                .includes(textoBusqueda);
+    const activosFiltrados = useMemo(() => {
+        const textoBusqueda = busqueda.trim().toLowerCase();
 
-        const coincideEstado = !estado || c.estado === estado;
-        const coincideTipo = !tipo || c.tipo === tipo;
+        return activos.filter((activo) => {
+            const coincideBusqueda =
+                !busqueda ||
+                `${activo.codigo} ${activo.marca} ${activo.modelo} ${activo.responsable}`
+                    .toLowerCase()
+                    .includes(textoBusqueda);
 
-        return coincideBusqueda && coincideEstado && coincideTipo
-    });
+            const coincideEstado =
+                !estado || activo.estado === estado;
+
+            const coincideTipo =
+                !tipo || activo.tipo === tipo;
+
+            return coincideBusqueda && coincideEstado && coincideTipo;
+        });
+    }, [activos, busqueda, estado, tipo]);
 
     const limpiarFiltros = () => {
         setBusqueda("");
@@ -46,9 +48,9 @@ export default function Inventario() {
         (activo) => activo.id === seleccionado
     );
 
-    const columnHelper = createColumnHelper<typeof features, Activo>();
+    const columnHelper = createColumnHelper<Activo>();
 
-    const columns = columnHelper.columns([
+    const columns = [
         columnHelper.accessor("codigo", {
             header: "Código",
         }),
@@ -102,23 +104,22 @@ export default function Inventario() {
                 </button>
             ),
         }),
-    ]);
+    ];
 
-    const table = useTable(
-        {
-            features,
-            columns,
-            data: activosFiltrados,
+    const table = useReactTable({
+        data: activosFiltrados,
+        columns,
 
-            initialState: {
-                pagination: {
-                    pageIndex: 0,
-                    pageSize: 10,
-                },
+        initialState: {
+            pagination: {
+                pageIndex: 0,
+                pageSize: 10,
             },
         },
-        (state) => ({pagination: state.pagination})
-    );
+
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+    });
 
     useEffect(() => {
         if (errorActivos) {
@@ -294,14 +295,19 @@ export default function Inventario() {
                                                         key={row.id}
                                                         className="border-t border-[#303747] transition hover:bg-[#23202a] hover:brightness-110 hover:shadow-lg text-center"
                                                     >
-                                                        {row.getAllCells().map((cell) => (
-                                                            <td
-                                                                key={cell.id}
-                                                                className="px-3 py-4"
-                                                            >
-                                                                <table.FlexRender cell={cell} />
-                                                            </td>
-                                                        ))}
+                                                        {
+                                                            row.getVisibleCells().map((cell) => (
+                                                                <td
+                                                                    key={cell.id}
+                                                                    className="px-3 py-4"
+                                                                >
+                                                                    {flexRender(
+                                                                        cell.column.columnDef.cell,
+                                                                        cell.getContext()
+                                                                    )}
+                                                                </td>
+                                                            ))
+                                                        }
                                                     </tr>
                                                 ))
                                             )}
@@ -318,7 +324,7 @@ export default function Inventario() {
                         </button>
 
                         <span className="text-sm text-[#b2b7c8]">
-                            Página {table.state.pagination.pageIndex + 1} de{" "}
+                            Página {table.getState().pagination.pageIndex + 1} de{" "}
                             {table.getPageCount()}
                         </span>
 
@@ -356,6 +362,18 @@ export default function Inventario() {
                 (activoSeleccionado?.tipo === "Impresora")
                 && (
                     <DetalleImpresora
+                        onCerrar={() => setSeleccionado(null)}
+                        id={seleccionado}
+                    />
+                )}
+
+            {seleccionado != null &&
+                (activoSeleccionado?.tipo !== "Notebook" &&
+                    activoSeleccionado?.tipo !== "Desktop" &&
+                    activoSeleccionado?.tipo !== "Impresora")
+                && (
+                    <DetallePeriferico
+                        abierto={seleccionado !== null}
                         onCerrar={() => setSeleccionado(null)}
                         id={seleccionado}
                     />
