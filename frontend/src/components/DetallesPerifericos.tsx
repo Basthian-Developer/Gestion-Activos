@@ -1,22 +1,22 @@
-import { useComputadores } from "@/hooks/useComputers";
+import { usePerifericos } from "@/hooks/usePerifericos";
 import { useEffect } from "react";
 
-interface DetalleComputadorProps {
+interface DetallePerifericoProps {
     abierto: boolean;
     onCerrar: () => void;
     id: number;
 }
 
-export default function DetalleComputador({
+export default function DetallePeriferico({
     abierto,
     onCerrar,
     id
-}: DetalleComputadorProps) {
-    const { data, isLoading, error } = useComputadores();
+}: DetallePerifericoProps) {
+    const { data, isLoading, error } = usePerifericos();
 
-    const computadores = data ?? [];
+    const perifericos = data ?? [];
 
-    const computador = computadores.find(
+    const periferico = perifericos.find(
         (computador) => computador.activo_id === id
     ) ?? null;
 
@@ -50,7 +50,7 @@ export default function DetalleComputador({
                         </p>
 
                         <h2 className="mt-2 font-serif text-3xl">
-                            {computador?.marca} {computador?.modelo}
+                            {periferico?.marca} {periferico?.modelo}
                         </h2>
                     </div>
 
@@ -67,7 +67,7 @@ export default function DetalleComputador({
                 {/* Código y estado */}
                 <div className="rounded-xl bg-[#43252c] p-4">
                     <div className="flex justify-between text-sm font-bold">
-                        <span>{computador?.codigo}</span>
+                        <span>{periferico?.codigo}</span>
 
                         <span className="text-[#ffb36b]">
                             Asignado
@@ -81,19 +81,19 @@ export default function DetalleComputador({
                         <div>Cargando...</div>
                     ) :
 
-                        error || computador === null ? (
+                        error || periferico === null ? (
                             <div>Dispositivo no disponible</div>
                         )
                             : ([
-                                ["Tipo", computador.tipo],
-                                ["Serie", computador.serial],
-                                ["Responsable", computador.responsable],
-                                ["Ubicación", computador.ubicacion],
-                                ["Sistema Operativo", computador.os],
-                                ["Dirección IP", computador.direccion_ip],
-                                ["MAC", computador.direccion_mac],
-                                ["Procesador", computador.procesador],
-                                ["RAM", `${computador.ram_type} ${computador.ram_size}`],
+                                ["Tipo", periferico.tipo],
+                                ["Serie", periferico.serial],
+                                ["Marca", periferico.marca],
+                                ["Modelo", periferico.modelo],
+                                ["Responsable", periferico.responsable],
+                                ["Ubicación", periferico.ubicacion],
+                                ["Conexion", periferico.conexion],
+                                ["Puerto", periferico.puerto],
+
                             ].map(([label, value]) => (
                                 <div
                                     key={label}

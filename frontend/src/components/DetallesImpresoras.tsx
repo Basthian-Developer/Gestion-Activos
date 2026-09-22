@@ -10,26 +10,19 @@ export default function DetalleImpresora({
     onCerrar,
     id
 }: DetalleImpresoraProps) {
-    const {data, isLoading, error} = usePrinters();
+    const { data, isLoading, error } = usePrinters();
 
-    const impresora = data?.find(
+    const impresoras = data ?? [];
+
+    const impresora = impresoras.find(
         (impresora) => impresora.activo_id === id
-    );
+    ) ?? null;
 
     useEffect(() => {
-        if(error){
+        if (error) {
             console.error(error);
         }
     }, [error]);
-
-    useEffect(() => {
-        if(!isLoading && data && !impresora){
-            console.error(`No se encontro el computador a partir del activo asociado con id: ${id}`);
-        }
-        if(impresora){
-            console.log(impresora);
-        }
-    }, [impresora, data, id, isLoading]);
 
     return (
         <>
@@ -69,40 +62,48 @@ export default function DetalleImpresora({
                 {/* Código y estado */}
                 <div className="rounded-xl bg-[#43252c] p-4">
                     <div className="flex justify-between text-sm font-bold">
-                        <span>TS-EQ-0142</span>
+                        <span>{impresora?.codigo}</span>
 
                         <span className="text-[#ffb36b]">
-                            Asignado
+                            {impresora?.estado}
                         </span>
                     </div>
                 </div>
 
                 {/* Información */}
                 <dl className="mt-6 grid grid-cols-2 gap-4">
-                    {[
-                        ["Tipo", "Notebook"],
-                        ["Serie", "LNV-8841-CC"],
-                        ["Responsable", "Camila Reyes"],
-                        ["Ubicación", "Casa Matriz · Piso 3"],
-                        ["Condición", "Buena"],
-                        ["Garantía", "14 marzo 2027"],
-                    ].map(([label, value]) => (
-                        <div
-                            key={label}
-                            className="border-b border-[#303747] pb-3"
-                        >
-                            <dt className="text-[10px] uppercase text-[#b2b7c8]">
-                                {label}
-                            </dt>
+                    {isLoading ? (
+                        <div>Cargando...</div>
+                    )
+                        : error || impresora === null ? (
+                            <div>Dispositivo no disponible</div>
+                        )
+                            : ([
+                                ["Serie", impresora.serial],
+                                ["Direccion IP", impresora.direccionIp],
+                                ["Marca", impresora.marca],
+                                ["Modelo", impresora.modelo],
+                                ["Conexion", impresora.conexion],
+                                ["Color", impresora.color],
+                                ["Responsable", impresora.responsable],
+                                ["Ubicación", impresora.ubicacion],
+                            ].map(([label, value]) => (
+                                <div
+                                    key={label}
+                                    className="border-b border-[#303747] pb-3"
+                                >
+                                    <dt className="text-[10px] uppercase text-[#b2b7c8]">
+                                        {label}
+                                    </dt>
 
-                            <dd className="mt-1 text-sm font-semibold">
-                                {value}
-                            </dd>
-                        </div>
-                    ))}
+                                    <dd className="mt-1 text-sm font-semibold">
+                                        {value}
+                                    </dd>
+                                </div>
+                            )))}
                 </dl>
 
-                {/* Historial */}
+                {/* Historial 
                 <h3 className="mt-8 font-serif text-xl">
                     Historial
                 </h3>
@@ -129,7 +130,7 @@ export default function DetalleImpresora({
                     </div>
                 </div>
 
-                {/* Acciones */}
+                 Acciones 
                 <button
                     type="button"
                     className="action-button mt-8 w-full justify-center"
@@ -140,6 +141,7 @@ export default function DetalleImpresora({
                     />{" "}
                     Registrar movimiento
                 </button>
+                */}
             </aside>
         </>
     );

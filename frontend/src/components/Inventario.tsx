@@ -1,7 +1,10 @@
 import { useActivos } from "@/hooks/useActivos";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useReactTable, getCoreRowModel, getPaginationRowModel, createColumnHelper, flexRender } from "@tanstack/react-table"
 import DetalleComputador from "@/components/DetallesComputador";
 import DetalleImpresora from "./DetallesImpresoras";
+import DetallePeriferico from "./DetallesPerifericos";
+import type Activo from "@/models/Activo";
 
 type Estado = "Disponible" | "Asignado" | "En reparación" | "Baja";
 
@@ -12,22 +15,28 @@ export default function Inventario() {
     const [tipo, setTipo] = useState<string>("");
     const [seleccionado, setSeleccionado] = useState<number | null>(null);
 
-    const activos = data ?? [];
+    const activos = useMemo(() => data ?? [], [data]);
 
     const tiposDisponibles = [...new Set(activos.map((c) => c.tipo))];
-    const textoBusqueda = busqueda.trim().toLowerCase();
-    const activosFiltrados = activos.filter((c) => {
-        const coincideBusqueda =
-            !busqueda ||
-            `${c.codigo} ${c.marca} ${c.modelo} ${c.responsable}`
-                .toLowerCase()
-                .includes(textoBusqueda);
+    const activosFiltrados = useMemo(() => {
+        const textoBusqueda = busqueda.trim().toLowerCase();
 
-        const coincideEstado = !estado || c.estado === estado;
-        const coincideTipo = !tipo || c.tipo === tipo;
+        return activos.filter((activo) => {
+            const coincideBusqueda =
+                !busqueda ||
+                `${activo.codigo} ${activo.marca} ${activo.modelo} ${activo.responsable}`
+                    .toLowerCase()
+                    .includes(textoBusqueda);
 
-        return coincideBusqueda && coincideEstado && coincideTipo
-    });
+            const coincideEstado =
+                !estado || activo.estado === estado;
+
+            const coincideTipo =
+                !tipo || activo.tipo === tipo;
+
+            return coincideBusqueda && coincideEstado && coincideTipo;
+        });
+    }, [activos, busqueda, estado, tipo]);
 
     const limpiarFiltros = () => {
         setBusqueda("");
@@ -38,6 +47,79 @@ export default function Inventario() {
     const activoSeleccionado = activos.find(
         (activo) => activo.id === seleccionado
     );
+
+    const columnHelper = createColumnHelper<Activo>();
+
+    const columns = [
+        columnHelper.accessor("codigo", {
+            header: "Código",
+        }),
+
+        columnHelper.display({
+            id: "activo",
+            header: "Activo",
+            cell: ({ row }) => (
+                <div>
+                    <strong>
+                        {row.original.marca} {row.original.modelo}
+                    </strong>
+
+                    <small className="block text-xs text-[#b2b7c8]">
+                        {row.original.tipo} · {row.original.serial}
+                    </small>
+                </div>
+            ),
+        }),
+
+        columnHelper.accessor("responsable", {
+            header: "Responsable",
+        }),
+
+        columnHelper.accessor("ubicacion", {
+            header: "Ubicación",
+        }),
+
+        columnHelper.accessor("estado", {
+            header: "Estado",
+        }),
+
+        columnHelper.display({
+            id: "acciones",
+            header: "",
+            cell: ({ row }) => (
+                <button
+                    type="button"
+                    className="
+                    bg-[#e35d62]
+                    hover:bg-[#ff8b6a]
+                    text-white
+                    px-4 py-2
+                    rounded-lg
+                    transition-colors
+                    duration-200
+                "
+                    onClick={() => setSeleccionado(row.original.id)}
+                >
+                    Ver detalle
+                </button>
+            ),
+        }),
+    ];
+
+    const table = useReactTable({
+        data: activosFiltrados,
+        columns,
+
+        initialState: {
+            pagination: {
+                pageIndex: 0,
+                pageSize: 10,
+            },
+        },
+
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+    });
 
     useEffect(() => {
         if (errorActivos) {
@@ -207,108 +289,67 @@ export default function Inventario() {
                                                 </td>
                                             </tr>
                                         ) :
-                                            (activosFiltrados.map(
-                                                (activo) => (
+                                            (
+                                                table.getRowModel().rows.map((row) => (
                                                     <tr
-                                                        key={activo.id}
+                                                        key={row.id}
                                                         className="border-t border-[#303747] transition hover:bg-[#23202a] hover:brightness-110 hover:shadow-lg text-center"
                                                     >
-                                                        <td className="px-3 py-4 font-bold text-[#ff8b6a]">
-                                                            {
-                                                                activo.codigo
-                                                            }
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            <strong>
-                                                                {
-                                                                    activo.marca
-                                                                }{" "}
-                                                                {
-                                                                    activo.modelo
-                                                                }
-                                                            </strong>
-
-                                                            <small className="block text-xs text-[#b2b7c8]">
-                                                                {
-                                                                    activo.tipo
-                                                                }{" "}
-                                                                ·{" "}
-                                                                {
-                                                                    activo.serial
-                                                                }
-                                                            </small>
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            {
-                                                                activo.responsable
-                                                            }
-                                                        </td>
-
-                                                        <td className="px-3 py-4 text-[#b2b7c8]">
-                                                            {
-                                                                activo.ubicacion
-                                                            }
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            <span
-                                                                className={`rounded-full px-2 py-1 text-[10px] font-bold ${activo.estado ===
-                                                                    "Asignado"
-                                                                    ? "bg-[#493423] text-[#ffb36b]"
-                                                                    : activo.estado ===
-                                                                        "En reparación"
-                                                                        ? "bg-[#43252c] text-[#ff8b6a]"
-                                                                        : activo.estado ===
-                                                                            "Disponible"
-                                                                            ? "bg-[#263b36] text-[#a8d36b]"
-                                                                            : "bg-[#303747] text-[#b2b7c8]"
-                                                                    }`}
-                                                            >
-                                                                {
-                                                                    activo.estado
-                                                                }
-                                                            </span>
-                                                        </td>
-
-                                                        <td className="px-3 py-4">
-                                                            <button
-                                                                type="button"
-                                                                className="bg-[#e35d62]
-                                                                hover:bg-[#ff8b6a]
-                                                                text-white
-                                                                px-4 py-2
-                                                                rounded-lg
-                                                                transition-colors
-                                                                duration-200"
-                                                                onClick={() =>
-                                                                    setSeleccionado(
-                                                                        activo.id,
-                                                                    )
-                                                                }
-                                                            >
-                                                                Ver detalle
-                                                            </button>
-                                                        </td>
+                                                        {
+                                                            row.getVisibleCells().map((cell) => (
+                                                                <td
+                                                                    key={cell.id}
+                                                                    className="px-3 py-4"
+                                                                >
+                                                                    {flexRender(
+                                                                        cell.column.columnDef.cell,
+                                                                        cell.getContext()
+                                                                    )}
+                                                                </td>
+                                                            ))
+                                                        }
                                                     </tr>
-                                                ),
-                                            ))}
+                                                ))
+                                            )}
                         </tbody>
                     </table>
+                    <div className="mt-4 flex items-center justify-between">
+                        <button
+                            type="button"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                            className="rounded-lg border border-[#303747] px-4 py-2 text-sm text-[#f4f6ff] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            Anterior
+                        </button>
+
+                        <span className="text-sm text-[#b2b7c8]">
+                            Página {table.getState().pagination.pageIndex + 1} de{" "}
+                            {table.getPageCount()}
+                        </span>
+
+                        <button
+                            type="button"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                            className="rounded-lg border border-[#303747] px-4 py-2 text-sm text-[#f4f6ff] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            Siguiente
+                        </button>
+                    </div>
                 </div>
 
                 {!loadingActivos && !errorActivos &&
                     (
                         <p className="mt-4 text-xs text-[#b2b7c8]">
-                            Mostrando {activosFiltrados.length} de{" "}
-                            {activos.length} activos
+                            Mostrando {table.getRowModel().rows.length} de{" "}
+                            {activosFiltrados.length} activos
                         </p>
                     )}
             </div>
             {seleccionado != null &&
-                (activoSeleccionado?.tipo === "Notebook" || 
-                activoSeleccionado?.tipo === "Desktop")
+                (activoSeleccionado?.tipo === "Notebook" ||
+                    activoSeleccionado?.tipo === "Desktop")
                 && (
                     <DetalleComputador
                         abierto={seleccionado !== null}
@@ -321,6 +362,18 @@ export default function Inventario() {
                 (activoSeleccionado?.tipo === "Impresora")
                 && (
                     <DetalleImpresora
+                        onCerrar={() => setSeleccionado(null)}
+                        id={seleccionado}
+                    />
+                )}
+
+            {seleccionado != null &&
+                (activoSeleccionado?.tipo !== "Notebook" &&
+                    activoSeleccionado?.tipo !== "Desktop" &&
+                    activoSeleccionado?.tipo !== "Impresora")
+                && (
+                    <DetallePeriferico
+                        abierto={seleccionado !== null}
                         onCerrar={() => setSeleccionado(null)}
                         id={seleccionado}
                     />
